@@ -3,7 +3,7 @@ import time
 # for RPI version 1, use “bus = smbus.SMBus(0)”
 bus = smbus.SMBus(1)
 
-# This is the address we setup in the Arduino Program
+# This is the i2c address we setup
 address = 0x04
 
 def writeNumber(value):
