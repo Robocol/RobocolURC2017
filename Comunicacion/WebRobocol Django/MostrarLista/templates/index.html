@@ -1,0 +1,48 @@
+{% load staticfiles %}
+
+<html>
+<head>
+	
+<script type="text/javascript" src="{% static 'AJAX/update.js' %}"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/prototype/1.7.3.0/prototype.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+</head>
+	<body>
+		{% csrf_token %}
+		<div id="container"></div>
+
+
+		
+
+
+		<script src="{% static 'js/virtualjoystick.js' %}"></script>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+		<script>
+			// one on the right of the screen
+			var joystick	= new VirtualJoystick({
+				container	: document.getElementById('container'),
+				mouseSupport	: true,
+				strokeStyle	: 'rgb(255,255,255)',
+				mouseSupport: true,
+		      	stationaryBase: true,
+                baseX: window.innerWidth/2,
+                baseY: window.innerHeight/2,
+		      	limitStickTravel: true,
+		      	stickRadius: 130	
+			});
+
+			joystick.addEventListener('touchmoveVal', function(event){
+				izquierdo(joystick.deltaX(), joystick.deltaY());
+			});
+			joystick.addEventListener('touchEnd', function(event){
+				izquierdo(0, 0);
+			});
+
+		</script>
+
+		
+
+
+	</body>
+</html>
