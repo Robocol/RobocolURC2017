@@ -1,0 +1,60 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Raspberry</title>
+
+	<script src="{% static 'js/js.cookie.min.js' %}"></script>
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+
+	<style type="text/css">
+
+	body{
+
+		background: url({% static 'images/LogoRPi.jpg' %}) no-repeat center center fixed; 
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: contain;
+	}
+
+	label{
+		font-family: Helvetica;
+		font-size:30px;
+	}
+
+	</style>
+
+	<script type="text/javascript">
+
+		function actualizarRPM()
+		{
+			jQuery.ajax('/actualizarRPM', {method: 'post',data: ({'csrfmiddlewaretoken':Cookies.get('csrftoken')}), success: function(transport){
+				respuesta = JSON.parse(transport)
+				jQuery("#rpm_i").html(respuesta['i'])
+				jQuery("#rpm_d").html(respuesta['d'])
+				jQuery("#control").html(respuesta['c'])
+			}});
+		}
+
+		setInterval(actualizarRPM, 500);
+
+	</script>
+
+
+</head>
+<body>
+
+	<div style="position: absolute; left: 50px;top: 50px;right: 50px;bottom: 50px;z-index: 10;background-color: #c3ddffbd;padding: 20px;">
+
+		<label style="display: block;text-align: center;font-size: 40px">Proyecto UCUMARÍ</label><br>
+
+		<label>Llantas izquierdas:</label> <label id='rpm_i'>{{ RPM_izq }}</label> <label>RPM</label> <br>
+		<label>Llantas derechas:</label> <label id='rpm_d'>{{ RPM_der }}</label> <label>RPM</label> <br>
+		<label>Control:</label> <label id='control'>{{ control }}</label>
+	</div>
+
+	<label style="position: absolute;bottom: 10px;right: 10px;font-size: inherit;">ROBOCOL</label>
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+{% load staticfiles %}
+
+<html>
+<head>
+
+	<title>UCUMARÍ</title>
+	
+	<script type="text/javascript" src="{% static 'AJAX/update.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/prototype.js' %}"></script>
+	<script src="{% static 'js/js.cookie.min.js' %}"></script>
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script>jQuery.noConflict();</script>
+
+
+	<style type="text/css">
+
+	.toggle {
+		position: relative;
+		display: block;
+		width: 67px;;
+		height: 30px;
+		cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
+		transform: translate3d(0, 0, 0);
+	}
+	.toggle:before {
+		content: "";
+		position: relative;
+		top: 3px;
+		left: 3px;
+		width: 60px;
+		height: 24px;
+		display: block;
+		background: #7c7c7c;
+		border-radius: 11px;
+		transition: background 0.2s ease;
+	}
+	.toggle span {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 30px;
+		height: 30px;
+		display: block;
+		background: white;
+		border-radius: 20px;
+		box-shadow: 0 3px 8px rgba(124, 124, 124, 0.5);
+		transition: all 0.2s ease;
+	}
+	.toggle span:before {
+		content: "";
+		position: absolute;
+		display: block;
+		margin: -18px;
+		width: 56px;
+		height: 56px;
+		background: rgba(26, 108, 181, 0.5);
+		border-radius: 50%;
+		transform: scale(0);
+		opacity: 1;
+		pointer-events: none;
+	}
+
+	#cbx:checked + .toggle:before {
+		background: #75b2ea;
+	}
+	#cbx:checked + .toggle span {
+		background: #1a6cb5;
+		transform: translateX(36px);
+		transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25), background 0.15s ease;
+		box-shadow: 0 3px 8px rgba(26, 108, 181, 0.2);
+	}
+	#cbx:checked + .toggle span:before {
+		transform: scale(1);
+		opacity: 0;
+		transition: all 0.4s ease;
+	}
+
+
+</style>
+
+
+<script type="text/javascript">
+
+	function enviarEstado(estado)
+	{
+		jQuery.ajax('/cambiarEstado', {method: 'post',data: ({'csrfmiddlewaretoken':Cookies.get('csrftoken') , 'estado':estado})});
+	}
+
+	function enviarComandoBrazo(boton)
+	{
+		jQuery.ajax('/accionBrazo', {method: 'post',data: ({'csrfmiddlewaretoken':Cookies.get('csrftoken') , 'id':boton.id})});
+	}
+
+</script>
+
+</head>
+<body>
+
+	<div style="position: absolute; left: 10px;top: 10px;z-index: 10;background-color: #c3ddff;padding: 20px;">
+
+		<label style="white-space:nowrap;display: inline-block;vertical-align: top;font-size: 30px;font-family: Helvetica;margin-right: 20px;">RF</label>
+
+		<input {% if estado %}checked{% endif %} type="checkbox" id="cbx" style="display:none" name="cbx" onchange="enviarEstado(this.checked)" />
+		<label for="cbx" class="toggle" style="display: inline-block;vertical-align: top;"><span></span></label>
+
+		<label style="white-space:nowrap;display: inline-block;vertical-align: top;font-size: 30px;font-family: Helvetica;margin-left: 20px;">Wi-Fi</label>
+	</div>
+
+
+	<div style="position: absolute; right: 10px;top: 20%;z-index: 10;background-color: #c3ddff;padding: 20px;">
+
+		<label style="white-space:nowrap;display: inline-block;vertical-align: top;font-size: 30px;font-family: Helvetica;margin-right: 20px;margin-left: 22px;">1</label>
+
+		<label style="white-space:nowrap;display: inline-block;vertical-align: top;font-size: 30px;font-family: Helvetica;margin-left: 43px;">2</label>
+
+		<div>
+			<input onclick="enviarComandoBrazo(this)" id = "btn_1_up" type="button" style="background: url({% static 'images/arrow_up.png' %});height: 60px;background-size: 60px 60px;width: 60px;border: none;cursor: pointer;outline: none;"/>
+
+			<input onclick="enviarComandoBrazo(this)" id = "btn_2_up" type="button" style="background: url({% static 'images/arrow_up.png' %});height: 60px;background-size: 60px 60px;width: 60px;border: none;cursor: pointer;outline: none;margin-left: 20px;"/>
+
+		</div>
+
+		<div>
+			<input onclick="enviarComandoBrazo(this)" id = "btn_1_dot" type="button" style="background: url({% static 'images/dot.png' %});height: 60px;background-size: 60px 60px;width: 60px;border: none;cursor: pointer;outline: none;"/>
+
+			<input onclick="enviarComandoBrazo(this)" id = "btn_2_dot" type="button" style="background: url({% static 'images/dot.png' %});height: 60px;background-size: 60px 60px;width: 60px;border: none;cursor: pointer;outline: none;margin-left: 20px;"/>
+
+		</div>
+
+		<div>
+			<input onclick="enviarComandoBrazo(this)" id = "btn_1_down" type="button" style="background: url({% static 'images/arrow_down.png' %});height: 60px;background-size: 60px 60px;width: 60px;border: none;cursor: pointer;outline: none;"/>
+
+			<input onclick="enviarComandoBrazo(this)" id = "btn_2_down" type="button" style="background: url({% static 'images/arrow_down.png' %});height: 60px;background-size: 60px 60px;width: 60px;border: none;cursor: pointer;outline: none;margin-left: 20px;"/>
+
+		</div>
+	</div>
+
+	<div style="position: absolute; right: 10px;top: 65%;z-index: 10;background-color: #c3ddff;padding: 20px;">
+		<div>
+			<input onclick="enviarComandoBrazo(this)" id = "btn_p_close" type="button" style="background: url({% static 'images/close.png' %});height: 32px;background-size: 32px 32px;width: 32px;border: none;cursor: pointer;outline: none;"/>
+
+			<input onclick="enviarComandoBrazo(this)" id = "btn_p_dot" type="button" style="background: url({% static 'images/dot.png' %});height: 32px;background-size: 32px 32px;width: 32px;border: none;cursor: pointer;outline: none;margin-left: 20px;"/>
+
+			<input onclick="enviarComandoBrazo(this)" id = "btn_p_open" type="button" style="background: url({% static 'images/open.png' %});height: 32px;background-size: 32px 32px;width: 32px;border: none;cursor: pointer;outline: none;margin-left: 20px;"/>
+
+		</div>
+	</div>
+
+
+	{% csrf_token %}
+	<div id="container"></div>
+	<script src="{% static 'js/virtualjoystick.js' %}"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+	<script>
+			// one on the right of the screen
+			var joystick	= new VirtualJoystick({
+				container	: document.getElementById('container'),
+				mouseSupport	: true,
+				strokeStyle	: 'rgb(255,255,255)',
+				mouseSupport: true,
+				stationaryBase: true,
+				baseX: jQuery("#container").width()/2,
+				baseY: jQuery("#container").height()/2,
+				limitStickTravel: true,
+				stickRadius: 130	
+			});
+
+			joystick.addEventListener('touchmoveVal', function(event){
+				izquierdo(joystick.deltaX(), joystick.deltaY());
+			});
+			joystick.addEventListener('touchEnd', function(event){
+				izquierdo(0, 0);
+			});
+
+		</script>
+
+		
+
+
+	</body>
+	</html>
